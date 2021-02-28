@@ -53,11 +53,96 @@ class Notepad(QMainWindow):
         # File menus
         filemenu = self.menuBar().addMenu("&File")
 
+        # Edit menu
+        editmenu = self.menuBar().addMenu('&Edit')
         # file Toolbar
         file_toolbar = QToolBar()
         file_toolbar.setIconSize(QSize(30, 30))
         self.addToolBar(Qt.BottomToolBarArea, file_toolbar)
         self.update_title()
+
+        # Edit Toolbar
+        edit_toolbar = QToolBar()
+        edit_toolbar.setIconSize(QSize(30, 30))
+        self.addToolBar(Qt.BottomToolBarArea, edit_toolbar)
+
+        """
+        Undo, Redo actions
+        """
+        undo_action = self.create_action(
+            self,
+            'images/undo.png',
+            'Undo',
+            'Undo',
+            QKeySequence.Undo,
+            self.editor.undo
+        )
+        redo_action = self.create_action(
+            self,
+            'images/redo.png',
+            'Redo',
+            'Redo',
+            QKeySequence.Redo,
+            self.editor.redo
+        )
+        # clear action
+        clear = self.create_action(
+            self,
+            'images/clean.png',
+            'Clear',
+            'Clear',
+            'ctrl+shift+c',
+            self.editor.clear
+        )
+        editmenu.addActions([undo_action, redo_action, clear])
+        edit_toolbar.addActions([undo_action,redo_action, clear])
+
+        # cut, copy, paste, select all
+        cut_action=self.create_action(
+            self,
+            'images/cut.png',
+            'Cut',
+            'Cut',
+            QKeySequence.Cut,
+            self.editor.cut
+        )
+        copy_action=self.create_action(
+            self,
+            'images/copy.png',
+            'Copy',
+            'Copy',
+            QKeySequence.Copy,
+            self.editor.copy
+        )
+        paste_action=self.create_action(
+            self,
+            'images/paste.png',
+            'Paste',
+            'Paste',
+            QKeySequence.Paste,
+            self.editor.paste
+        )
+        select_action=self.create_action(
+            self,
+            'images/selectall.png',
+            'Select All',
+            'Select All',
+            QKeySequence.SelectAll,
+            self.editor.selectAll
+        )
+        # Wrap text action
+        wrap_action=self.create_action(
+            self,
+            'images/wrap.png',
+            'Wrap Text',
+            'Wrap Text',
+            'ctrl+shift+W',
+            lambda : self.editor.setLineWrapMode(not self.editor.lineWrapMode())
+        )
+        edit_toolbar.addActions([cut_action,copy_action,paste_action,select_action, wrap_action])
+        editmenu.addActions([cut_action,copy_action,paste_action,select_action, wrap_action])
+
+        
         """
         open, save, saveAs
         """
